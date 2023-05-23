@@ -29,6 +29,15 @@ contract BirthdayPayout {
         _teammates.push(newTeammate);
         emit NewTeammate(account,name);
     }
+    function isHaveBirthday() public view returns(uint256){
+        require(getTeammatesNumber()>0,"No teammates in the database");
+        for(uint256 i=0;i<getTeammatesNumber();i++){
+            if(checkBirthday(i)){
+                return uint256(i);
+            }
+        }
+        revert("Noone found");
+    }
 
     function findBirthday() public onlyOwner{
         require(getTeammatesNumber()>0,"No teammates in the database");
