@@ -24,12 +24,8 @@ abstract contract Owned {
 contract HomeWork2 is Owned {
     bytes private _name;
     uint private _numberOfContact;
-    struct Contact {
-        address contactAddress;
-        bytes contactName;
-    }
-    Contact contact;
-    mapping(uint => Contact) private _contacts;
+    address[] private _contactList;
+    mapping(address => string) private _contacts;
     event newContact(string contactName, address contactAddress, uint index);
 
     constructor(string memory name) {
@@ -47,13 +43,15 @@ contract HomeWork2 is Owned {
 
     function setContact(address _contactAddress, string memory _contactName) external onlyOwner {
         emit newContact(_contactName, _contactAddress, _numberOfContact);
-        contact.contactAddress = _contactAddress;
-        contact.contactName = bytes(_contactName);
-        _contacts[_numberOfContact] = contact;
-        _numberOfContact += 1;
+        _contacts[_contactAddress] = _contactName;
+        _contactList.push(_contactAddress);
     }
 
-    function getContact(uint contactNumber) external view returns (address, string memory) {
-        return (_contacts[contactNumber].contactAddress, string(_contacts[contactNumber].contactName));
+    function getContactByAddress(address _address) external view returns (string memory) {
+        return string(_contacts[_address]);
+    }
+
+    function getContactByIndex(uint _index) external view returns (address) {
+        return _contactList[_index];
     }
 }
