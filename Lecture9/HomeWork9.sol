@@ -23,6 +23,8 @@ abstract contract HasName {
 }
 
 abstract contract Animal is Living, HasName {
+    string constant PLANT = "plant";
+    string constant MEAT = "meat";
 
     function getName() public view virtual returns(string memory) {
         return _name;
@@ -42,8 +44,6 @@ abstract contract Animal is Living, HasName {
 }
 
 abstract contract Herbivore is Animal {
-    string constant PLANT = "plant";
-
     modifier eatOnlyPlant(string memory _string) {
         require(StringComparer.compare(_string, PLANT), "Can only eat plant food");
         _;
@@ -55,28 +55,12 @@ abstract contract Herbivore is Animal {
 }
 
 abstract contract Carnivores is Animal {
-    string constant MEAT = "meat";
-
-    modifier eatOnlyPlant(string memory _string) {
+    modifier eatOnlyMeat(string memory _string) {
         require(StringComparer.compare(_string, MEAT), "Can only eat meat food");
         _;
     }
 
-    function Eat(string memory _string) public pure virtual override eatOnlyPlant(_string) returns(string memory) {
-        return super.Eat(_string);
-    }
-}
-
-abstract contract Omnivores is Animal {
-    string constant MEAT = "meat";
-    string constant PLANT = "plant";
-
-    modifier eatOnlyPlant(string memory _string) {
-        require(StringComparer.compare(_string, MEAT) || StringComparer.compare(_string, PLANT), "Can only eat meat or plant food");
-        _;
-    }
-
-    function Eat(string memory _string) public pure virtual override eatOnlyPlant(_string) returns(string memory) {
+    function Eat(string memory _string) public pure virtual override eatOnlyMeat(_string) returns(string memory) {
         return super.Eat(_string);
     }
 }
@@ -108,12 +92,20 @@ contract Wolf is Carnivores {
     }
 }
 
-contract Dog is Omnivores {
-
+contract Dog is Animal {
     constructor(string memory name) HasName(name) {}
+
+    modifier eatPlantAndMeat(string memory _string) {
+        require(StringComparer.compare(_string, MEAT) || StringComparer.compare(_string, PLANT), "Can only eat meat or plant food");
+        _;
+    }
 
     function Speak() public pure override returns(string memory) {
         return "Woof";
+    }
+
+    function Eat(string memory _string) public pure override eatPlantAndMeat(_string) returns(string memory) {
+        return super.Eat(_string);
     }
 }
 
