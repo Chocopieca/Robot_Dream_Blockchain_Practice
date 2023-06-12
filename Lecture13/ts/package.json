@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npx hardhat node",
     "compile": "npx hardhat compile",
-    "deploy": "npx hardhat deploy"
+    "deploy": "npx hardhat run ./scripts/deploy.ts"
   },
   "author": "",
   "license": "ISC",

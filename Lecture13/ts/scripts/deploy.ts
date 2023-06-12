@@ -1,22 +1,18 @@
-import { ethers } from "hardhat";
+import {ethers} from "hardhat";
 
 async function main() {
-  const currentTimestampInSeconds = Math.round(Date.now() / 1000);
-  const unlockTime = currentTimestampInSeconds + 60;
+  const contactBook = await ethers.getContractAt("ContactBook", "0xc3e53F4d16Ae77Db1c982e75a937B9f60FE63690");
 
-  const lockedAmount = ethers.parseEther("0.001");
-
-  const lock = await ethers.deployContract("Lock", [unlockTime], {
-    value: lockedAmount,
-  });
-
-  await lock.waitForDeployment();
-
-  console.log(
-    `Lock with ${ethers.formatEther(
-      lockedAmount
-    )}ETH and unlock timestamp ${unlockTime} deployed to ${lock.target}`
-  );
+  const firstAddress = await contactBook.getContactAddress(0);
+  console.log('firstAddress', firstAddress);
+  const addressName = await contactBook.getContactName(firstAddress);
+  console.log('addressName', addressName);
+  const transaction = await (await contactBook.addContact("test3")).wait();
+  console.log("transaction", transaction.hash);
+  const lastIndex = Number(await contactBook.getLastIndex()) - 1;
+  console.log('lastIndex', lastIndex);
+  const content = await contactBook.callContact(lastIndex);
+  console.log("content", content);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
