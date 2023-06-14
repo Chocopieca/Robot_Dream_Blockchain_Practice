@@ -1,26 +1,52 @@
-import { ethers } from "hardhat";
+const hre = require("hardhat");
 
 async function main() {
-  const currentTimestampInSeconds = Math.round(Date.now() / 1000);
-  const unlockTime = currentTimestampInSeconds + 60;
+  console.log('start')
+  const StringComparer = await hre.ethers.deployContract("contracts/Abstract.sol:StringComparer");
+  await StringComparer.waitForDeployment();
 
-  const lockedAmount = ethers.parseEther("0.001");
+  const [deployer] = await hre.ethers.getSigners();
+  const options = {
+    signer: deployer,
+    libraries: {
+      StringComparer: StringComparer.target
+    }
+  };
+  const Farmer = await hre.ethers.deployContract("Farmer");
+  const Cow = await hre.ethers.deployContract("Cow", ["Cow"], options);
+  const Horse = await hre.ethers.deployContract("Horse", ["Horse"], options);
+  const Wolf = await hre.ethers.deployContract("Wolf", ["Wolf"], options);
 
-  const lock = await ethers.deployContract("Lock", [unlockTime], {
-    value: lockedAmount,
-  });
+  await Farmer.waitForDeployment();
+  await Cow.waitForDeployment();
+  await Horse.waitForDeployment();
+  await Wolf.waitForDeployment();
 
-  await lock.waitForDeployment();
+  async function farmerCall(address: string) {
+    try {
+      const call = await Farmer.Call(address);
+      console.log("Farmer call: ", call);
+    } catch (e) {
+      console.error(e.message);
+    }
+  }
 
-  console.log(
-    `Lock with ${ethers.formatEther(
-      lockedAmount
-    )}ETH and unlock timestamp ${unlockTime} deployed to ${lock.target}`
-  );
+  async function farmerFeed(address: string, food: string) {
+    try {
+      const feedWolf = await Farmer.Feed(address, food);
+      console.log("Farmer feed wolf: ", feedWolf);
+    } catch (e) {
+      console.error(e.message);
+    }
+  }
+
+  await farmerCall(String(Cow.target));
+  await farmerCall(String(Horse.target));
+  await farmerFeed(String(Wolf.target), "plant");
+  await farmerFeed(String(Wolf.target), "meat");
+  console.log('end')
 }
 
-// We recommend this pattern to be able to use async/await everywhere
-// and properly handle errors.
 main().catch((error) => {
   console.error(error);
   process.exitCode = 1;
