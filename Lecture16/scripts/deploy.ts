@@ -1,21 +1,24 @@
 import { ethers } from "hardhat";
 
 async function main() {
-  const currentTimestampInSeconds = Math.round(Date.now() / 1000);
-  const unlockTime = currentTimestampInSeconds + 60;
+  const [owner] = await ethers.getSigners();
+  const MKKToken = await ethers.deployContract("MKKToken", [
+    "MKKToken", "MKK", 18, 8100000
+  ], owner);
 
-  const lockedAmount = ethers.parseEther("0.001");
+  await MKKToken.waitForDeployment();
 
-  const lock = await ethers.deployContract("Lock", [unlockTime], {
-    value: lockedAmount,
-  });
-
-  await lock.waitForDeployment();
+  const name = await MKKToken.name();
+  console.log("name", name);
+  const symbol = await MKKToken.symbol();
+  console.log("symbol", symbol);
+  const decimals = await MKKToken.decimals();
+  console.log("decimals", decimals);
+  const totalSupply = await MKKToken.totalSupply();
+  console.log("decimals", totalSupply);
 
   console.log(
-    `Lock with ${ethers.formatEther(
-      lockedAmount
-    )}ETH and unlock timestamp ${unlockTime} deployed to ${lock.target}`
+    `MKKToken deployed to ${MKKToken.target}`
   );
 }
 
