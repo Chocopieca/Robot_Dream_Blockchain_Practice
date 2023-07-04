@@ -10,32 +10,20 @@ contract MKKToken is ERC20Capped, Ownable {
         string memory symbol_,
         uint8 decimals_,
         uint256 cap_
-    ) ERC20(name_, symbol_) ERC20Capped(cap_ * 10 ** decimals_) {
+    ) ERC20(name_, symbol_) ERC20Capped(cap_) {
         decimalsVal = decimals_;
-    }
-    function amountWithDecimals(uint256 amount) private view returns (uint256){
-        return amount * 10 ** decimals();
     }
     function decimals() public view virtual override returns (uint8) {
         return decimalsVal;
     }
     function mint(address account, uint256 amount) public onlyOwner {
-        super._mint(account, amountWithDecimals(amount));
-    }
-    function transfer(address to, uint256 amount) public override returns (bool) {
-        return super.transfer(to, amountWithDecimals(amount));
-    }
-    function approve(address spender, uint256 amount) public virtual override returns (bool) {
-        return super.approve(spender, amountWithDecimals(amount));
-    }
-    function transferFrom(address from, address to, uint256 amount) public virtual override returns (bool) {
-        return super.transferFrom(from, to, amountWithDecimals(amount));
+        super._mint(account, amount);
     }
     function burn(uint256 amount) public {
-        _burn(_msgSender(), amountWithDecimals(amount));
+        _burn(_msgSender(), amount);
     }
     function burnFrom(address account, uint256 amount) public onlyOwner {
-        _spendAllowance(account, _msgSender(), amountWithDecimals(amount));
+        _spendAllowance(account, _msgSender(), amount);
         _burn(account, amount);
     }
 }
