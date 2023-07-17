@@ -6,9 +6,10 @@ async function main() {
   const [owner] = await ethers.getSigners();
   let date = String(Date.now()).slice(0, -3);
   const numberOfMonth = 26;
+  const emissionValue = 8100000n * 10n ** 18n;
 
   const MKKToken: {[key: string]: any} | Contract = await ethers.deployContract("MKKToken", [
-    "MKKToken", "MKK", 18, 8100000
+    "MKKToken", "MKK", 18, emissionValue, emissionValue / 2n
   ], owner);
   const MKKVesting: {[key: string]: any} | Contract = await ethers.deployContract("MKKVesting", [
     "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
@@ -19,8 +20,8 @@ async function main() {
   await MKKToken.waitForDeployment();
   await MKKVesting.waitForDeployment();
 
-  await MKKToken.mint(MKKVesting.target, 8100000 * 0.5);
-  console.log('vesting amount', 8100000 * 0.5);
+  await MKKToken.transfer(MKKVesting.target, emissionValue / 100n * 5n);
+  console.log('vesting amount', 8100000 * 0.05);
 
   const amountOneMonth = await MKKVesting["vestedAmount(address,uint64)"](
     MKKToken.target,

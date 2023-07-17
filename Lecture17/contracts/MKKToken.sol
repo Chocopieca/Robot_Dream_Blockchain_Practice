@@ -9,9 +9,11 @@ contract MKKToken is ERC20Capped, Ownable {
         string memory name_,
         string memory symbol_,
         uint8 decimals_,
-        uint256 cap_
+        uint256 cap_,
+        uint totalSupply_
     ) ERC20(name_, symbol_) ERC20Capped(cap_) {
         decimalsVal = decimals_;
+        _mint(msg.sender, totalSupply_);
     }
     function decimals() public view virtual override returns (uint8) {
         return decimalsVal;
