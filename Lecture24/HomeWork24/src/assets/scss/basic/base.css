@@ -1,0 +1,12 @@
+@import "../tools/variables.css";
+
+body {
+  min-height: 100vh;
+  color: var(--color-text-1);
+  background: var(--color-background);
+  transition: color 0.5s, background-color 0.5s;
+  line-height: 1.6;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
