@@ -3,7 +3,7 @@
     <nav class="container">
       <div class="px-5">
         <router-link to="eth">ETH</router-link>
-        <router-link to="erc20">MKK</router-link>
+        <router-link to="erc20">ERC20</router-link>
       </div>
     </nav>
   </header>
