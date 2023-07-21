@@ -99,8 +99,7 @@ export default defineComponent({
     &:focus-within,
     &:focus-visible {
       outline: none;
-      border-color: var(--color-link-blue);
-      background-color: var(--color-background-input);
+      border-color: var(--color-orange);
       &::-webkit-input-placeholder {
         color: transparent;
       }
