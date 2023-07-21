@@ -1,8 +1,8 @@
 <template>
   <div class="h-100 flex-center">
     <BaseCard width="400" bgColor="#5E2750">
-      <h1 class="ma-0">ETH</h1>
-      <div>Balance: 0 ETH</div>
+      <h1 class="ma-0">ERC20</h1>
+      <div>Balance: 0 MKK</div>
       <BaseDivider class="my-2"/>
       <div>Address:</div>
       <div class="address">
@@ -24,7 +24,7 @@
 
 <script>
 export default {
-  name: "EtherPage",
+  name: "ERC20Page",
   computed: {
     getAddress() {
       let address = "0x5aCD656a61d4b2AAB249C3Fe3129E3867ab99283";

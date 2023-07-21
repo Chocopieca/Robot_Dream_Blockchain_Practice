@@ -1,5 +1,5 @@
 @import "scss/basic/normolize.css";
-@import "scss/basic/base.css";
+@import "scss/basic/base.scss";
 @import "scss/basic/color-helper.scss";
 @import "scss/basic/font-size-helper.scss";
 @import "scss/basic/global.scss";
