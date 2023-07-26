@@ -64,6 +64,7 @@ export default defineComponent({
         receiver: "",
         amount: "",
       };
+      alert(this.transition.hash);
       this.isLoading = false;
     }
   },
