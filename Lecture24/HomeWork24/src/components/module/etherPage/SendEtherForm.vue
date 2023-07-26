@@ -16,7 +16,7 @@
           :href="getEtherscanLink"
           target="_blank"
         >
-          Etherscan: {{ transaction.hash }}
+          Etherscan: {{ transaction }}
         </a>
       </div>
     </div>
@@ -58,19 +58,21 @@ export default defineComponent({
         amount: this.form.amount,
       }
       this.isLoading = true;
-      this.transaction = await this.onSendEth(payload);
+      this.transaction = await this.onSendEth(payload).then(res => {
+        alert(res.hash);
+        return res.hash;
+      });
       await this.getUserData();
       this.form = {
         receiver: "",
         amount: "",
       };
-      alert(this.transition.hash);
       this.isLoading = false;
     }
   },
   computed: {
     getEtherscanLink() {
-      return this.transaction ? `https://sepolia.etherscan.io/tx/${this.transaction.hash}` : null;
+      return this.transaction ? `https://sepolia.etherscan.io/tx/${this.transaction}` : null;
     }
   }
 })
