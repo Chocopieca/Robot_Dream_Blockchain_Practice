@@ -22,7 +22,7 @@ html body #particles {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: var(--color-dark-aubergine);
+  background: var(--color-dark);
   z-index: -1;
 }
 </style>

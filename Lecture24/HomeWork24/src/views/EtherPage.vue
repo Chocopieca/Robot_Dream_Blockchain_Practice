@@ -1,14 +1,14 @@
 <template>
   <div class="h-100 flex-center">
-    <BaseCard width="500" bgColor="#5E2750">
+    <BaseCard width="500" bgColor="#ffffff">
       <h1 class="ma-0">ETH</h1>
       <div>Balance: {{ userEtherBalance }} ETH</div>
-      <BaseDivider class="my-2"/>
+      <BaseDivider class="my-2" color="#000000"/>
       <div>Address:</div>
       <div class="address">
         {{ getAddress }}
       </div>
-      <BaseDivider class="my-2"/>
+      <BaseDivider class="my-2" color="#000000"/>
       <SendEtherForm />
     </BaseCard>
   </div>
@@ -17,6 +17,7 @@
 <script>
 import {useEtherJsStore} from "@/stores/useEtherJs";
 import {computed, defineAsyncComponent} from "vue";
+
 export default {
   name: "EtherPage",
   components: {

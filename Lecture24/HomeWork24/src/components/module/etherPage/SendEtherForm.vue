@@ -2,7 +2,7 @@
   <Transition mode="out-in">
     <div>
       <BaseLoading v-if="isLoading" />
-      <form class="mb-2">
+      <form :class="transaction ? 'mb-2' : ''">
         <div class="flex-center mb-5">
           <BaseInput v-model="form.receiver" label="Receiver" class="mr-2"/>
           <BaseInput v-model="form.amount" label="Amount" class="ml-2"/>

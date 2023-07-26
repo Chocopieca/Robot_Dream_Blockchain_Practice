@@ -83,10 +83,9 @@ export default defineComponent({
 <style scoped lang="scss">
 .button {
   cursor: pointer;
-  border-style: solid;
-  border-radius: 20px;
   white-space: nowrap;
   transition: 0.5s;
+  border: 0;
 
   &:focus {
     font-weight: 700;

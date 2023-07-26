@@ -79,9 +79,7 @@ export default defineComponent({
     font-size: 12px;
   }
   input {
-    border: 1px solid #777777;
     background-color: #fff;
-    border-radius: 7px;
     color: var(--color-text-1);
     padding: 13px 10px;
     height: 43px;
@@ -99,7 +97,6 @@ export default defineComponent({
     &:focus-within,
     &:focus-visible {
       outline: none;
-      border-color: var(--color-orange);
       &::-webkit-input-placeholder {
         color: transparent;
       }

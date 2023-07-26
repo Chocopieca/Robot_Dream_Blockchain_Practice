@@ -1,14 +1,14 @@
 <template>
   <div class="h-100 flex-center">
-    <BaseCard width="400" bgColor="#5E2750">
+    <BaseCard width="500" bgColor="#ffffff">
       <h1 class="ma-0">ERC20</h1>
       <div>Balance: 0 MKK</div>
-      <BaseDivider class="my-2"/>
+      <BaseDivider class="my-2" color="#000000"/>
       <div>Address:</div>
       <div class="address">
         {{ getAddress }}
       </div>
-      <BaseDivider class="my-2"/>
+      <BaseDivider class="my-2" color="#000000"/>
       <form>
         <div class="flex-center mb-5">
           <BaseInput label="Receiver" class="mr-2"/>
