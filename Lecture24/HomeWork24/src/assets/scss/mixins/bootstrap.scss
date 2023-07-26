@@ -43,6 +43,7 @@
 
   .container {
     max-width: #{$default-container-width};
+    margin: 0 auto;
   }
 
   @each $width in $container-width {

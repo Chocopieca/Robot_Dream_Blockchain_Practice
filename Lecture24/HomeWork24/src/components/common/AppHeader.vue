@@ -25,6 +25,10 @@ header {
     margin-right: 10px;
     font-size: 20px;
     font-weight: 700;
+
+    &.router-link-exact-active {
+      color: var(--color-black);
+    }
   }
 }
 </style>

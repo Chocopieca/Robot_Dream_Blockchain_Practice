@@ -1,17 +1,19 @@
 <template>
-  <div id="particles"></div>
+  <ParticlesComponent />
   <div class="wrapper font-family-poppins">
     <AppHeader />
-    <main class="bh-main">
-      <slot></slot>
+    <main>
+      <Transition mode="out-in">
+        <ConnectMetamask v-if="!Signer" />
+        <slot v-else />
+      </Transition>
     </main>
   </div>
 </template>
 
 <script lang="ts">
-import { defineAsyncComponent, defineComponent, ref } from "vue";
-import { tsParticles } from "tsparticles";
-import particlesjsConfig from "@/assets/json/particlesjs-config.json";
+import { defineAsyncComponent, defineComponent } from "vue";
+import { useEtherJsStore } from "@/stores/useEtherJs";
 
 export default defineComponent({
   name: "DefaultLayout",
@@ -19,14 +21,17 @@ export default defineComponent({
     AppHeader: defineAsyncComponent(
       () => import("@/components/common/AppHeader.vue")
     ),
+    ConnectMetamask: defineAsyncComponent(
+      () => import("@/components/common/ConnectMetamask.vue")
+    ),
+    ParticlesComponent: defineAsyncComponent(
+      () => import("@/components/common/ParticlesComponent.vue")
+    ),
   },
-  data() {
-    return {
-      isLoading: true,
-    };
-  },
-  mounted() {
-    tsParticles.load("particles", particlesjsConfig)
+  computed: {
+    Signer() {
+      return useEtherJsStore().signer;
+    }
   }
 });
 </script>
@@ -42,14 +47,8 @@ export default defineComponent({
 }
 main {
   height: calc(100% - 52px);
-}
-html body #particles {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: var(--color-dark-aubergine);
-  z-index: -1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

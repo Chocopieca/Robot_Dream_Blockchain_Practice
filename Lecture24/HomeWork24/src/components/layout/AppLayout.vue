@@ -22,6 +22,8 @@ export default defineComponent({
 
 <template>
   <component :is="layout">
-    <router-view />
+    <div>
+      <router-view />
+    </div>
   </component>
 </template>

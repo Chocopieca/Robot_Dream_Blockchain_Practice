@@ -67,7 +67,7 @@ export default defineComponent({
   display: block;
   width: 25%;
   height: 25%;
-  background-color: #BE46FD;
+  background-color: #E95420;
   border-radius: 100%;
   animation: sk-chase-dot-before 2.0s infinite ease-in-out both;
 }
