@@ -11,13 +11,11 @@
           SEND
         </BaseButton>
       </form>
-      <div
-        v-if="getEtherscanLink"
-        class="etherscan-link main-black-text"
-      >
+      <div v-if="getEtherscanLink" class="etherscan-link">
         <a
           :href="getEtherscanLink"
           target="_blank"
+          class="main-black-text"
         >
           Etherscan: {{ transaction }}
         </a>
@@ -28,7 +26,7 @@
 
 <script>
 import {defineComponent} from "vue";
-import {useEtherJsStore} from "@/stores/useEtherJs";
+import {useErc20Token} from "@/stores/useErc20Token";
 
 export default defineComponent({
   name: "SendEtherForm",
@@ -43,29 +41,26 @@ export default defineComponent({
     }
   },
   setup() {
-    const useEtherJs = useEtherJsStore();
+    const erc20Token = useErc20Token();
 
-    async function onSendEth(payload) {
-      return await useEtherJs.onSendEth(payload);
+    async function sendCurrency(payload) {
+      return await erc20Token.sendCurrency(payload)
     }
-    async function getUserData() {
-      return await useEtherJs.getUserData();
+    return {
+      erc20Token, sendCurrency
     }
-
-    return {useEtherJs, onSendEth, getUserData};
   },
   methods: {
     async submitForm() {
       const payload = {
-        receiver: this.form.receiver,
+        receiver: this.form.receiver.trim(),
         amount: this.form.amount,
       }
       this.isLoading = true;
-      this.transaction = await this.onSendEth(payload).then(res => {
+      this.transaction = await this.sendCurrency(payload).then(res => {
         alert(res.hash);
         return res.hash;
       });
-      await this.getUserData();
       this.form = {
         receiver: "",
         amount: "",

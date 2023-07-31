@@ -23,15 +23,10 @@ export default defineComponent({
       isLoading: false,
     }
   },
-  setup() {
-    const useEtherJs = useEtherJsStore();
-    const signer = useEtherJs.signer;
-    return {useEtherJs, signer};
-  },
   methods: {
     async onConnectMetamask() {
       this.isLoading = true;
-      await this.useEtherJs.onConnect();
+      await useEtherJsStore().onConnect();
       this.isLoading = false;
     }
   }

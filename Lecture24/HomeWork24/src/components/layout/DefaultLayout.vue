@@ -3,8 +3,8 @@
   <div class="wrapper font-family-poppins">
     <AppHeader />
     <main>
-      <Transition mode="out-in">
-        <ConnectMetamask v-if="!Signer" />
+      <Transition>
+        <ConnectMetamask v-if="!isConnected" />
         <slot v-else />
       </Transition>
     </main>
@@ -29,8 +29,8 @@ export default defineComponent({
     ),
   },
   computed: {
-    Signer() {
-      return useEtherJsStore().signer;
+    isConnected() {
+      return useEtherJsStore().isConnected;
     }
   }
 });
