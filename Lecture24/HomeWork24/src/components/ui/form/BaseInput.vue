@@ -15,9 +15,11 @@
       :placeholder="label"
       :required="required"
       @keydown.enter="$emit('enter', $event)"
+      @input="$emit('clearError')"
       @focus="labelIsVisible = true"
       @blur="labelIsVisible = false"
     >
+    <div v-if="error" class="main-red-text size10-weight400">{{ error }}</div>
   </div>
 </template>
 
@@ -51,6 +53,10 @@ export default defineComponent({
       type: String,
       default: '100%'
     },
+    error: {
+      type: String,
+      default: null
+    }
   },
   data() {
     return {
@@ -71,6 +77,7 @@ export default defineComponent({
 .base-input {
   position: relative;
   display: block;
+  min-height: 55px;
   &-label-tip {
     position: absolute;
     top: 0;

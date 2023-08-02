@@ -13,7 +13,7 @@
 
 <script lang="ts">
 import { defineAsyncComponent, defineComponent } from "vue";
-import { useEtherJsStore } from "@/stores/useEtherJs";
+import { useEtherJsStore } from "@/stores/useEtherJsStore";
 
 export default defineComponent({
   name: "DefaultLayout",

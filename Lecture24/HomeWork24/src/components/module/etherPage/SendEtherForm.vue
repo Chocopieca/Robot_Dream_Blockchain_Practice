@@ -4,8 +4,20 @@
       <BaseLoading v-if="isLoading" />
       <form :class="transaction ? 'mb-2' : ''">
         <div class="flex-center mb-5">
-          <BaseInput v-model="form.receiver" label="Receiver" class="mr-2"/>
-          <BaseInput v-model="form.amount" label="Amount" class="ml-2"/>
+          <BaseInput
+            v-model="form.receiver"
+            label="Receiver"
+            class="mr-2"
+            :error="errors.getError('address')"
+            @clearError="errors.clearError('address')"
+          />
+          <BaseInput
+            v-model="form.amount"
+            label="Amount"
+            class="ml-2"
+            :error="errors.getError('amount')"
+            @clearError="errors.clearError('amount')"
+          />
         </div>
         <BaseButton buttonColor="#E95420" @click="submitForm">
           SEND
@@ -28,7 +40,8 @@
 
 <script>
 import {defineComponent} from "vue";
-import {useEtherJsStore} from "@/stores/useEtherJs";
+import {useEtherJsStore} from "@/stores/useEtherJsStore";
+import useValidateModule from "@/composable/useValidateModule";
 
 export default defineComponent({
   name: "SendEtherForm",
@@ -40,10 +53,12 @@ export default defineComponent({
         receiver: "",
         amount: "",
       },
+      errors: this.validateModule.errorHandlerModule.value,
     }
   },
   setup() {
     const useEtherJs = useEtherJsStore();
+    const validateModule = useValidateModule();
 
     async function onSendEth(payload) {
       return await useEtherJs.onSendEth(payload);
@@ -52,25 +67,40 @@ export default defineComponent({
       return await useEtherJs.getUserData();
     }
 
-    return {useEtherJs, onSendEth, getUserData};
+    return {useEtherJs, validateModule, onSendEth, getUserData};
   },
   methods: {
     async submitForm() {
-      const payload = {
-        receiver: this.form.receiver,
-        amount: this.form.amount,
+      try {
+        const payload = {
+          receiver: this.form.receiver,
+          amount: this.form.amount,
+        }
+        if (!this.validate(payload.receiver, payload.amount)) return
+        this.isLoading = true;
+        this.transaction = await this.onSendEth(payload).then(res => {
+          alert(res.hash);
+          return res.hash;
+        });
+        await this.getUserData();
+        this.form = {
+          receiver: "",
+          amount: "",
+        };
+      } catch (e) {
+        console.log("SubmitForm error: ", e);
+      } finally {
+        this.isLoading = false;
       }
-      this.isLoading = true;
-      this.transaction = await this.onSendEth(payload).then(res => {
-        alert(res.hash);
-        return res.hash;
-      });
-      await this.getUserData();
-      this.form = {
-        receiver: "",
-        amount: "",
-      };
-      this.isLoading = false;
+    },
+    validate(receiver, amount) {
+      return this.validateModule.validateForm([
+        { key: "address", value: receiver, method: "isNotEmpty" },
+        { key: "amount", value: amount, method: "isNotEmpty" },
+        { key: "address", value: receiver, method: "isAddressValid" },
+        { key: "amount", value: amount, method: "isAmountOverZero" },
+        { key: "amount", value: amount, method: "isAmountNoOverEtherBalance" },
+      ])
     }
   },
   computed: {

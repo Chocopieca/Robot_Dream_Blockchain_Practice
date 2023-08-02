@@ -4,8 +4,21 @@
       <BaseLoading v-if="isLoading" />
       <form :class="transaction ? 'mb-2' : ''">
         <div class="flex-center mb-5">
-          <BaseInput v-model="form.receiver" label="Receiver" class="mr-2"/>
-          <BaseInput v-model="form.amount" label="Amount" class="ml-2"/>
+          <BaseInput
+            v-model="form.receiver"
+            label="Receiver"
+            class="mr-2"
+            :error="errors.getError('address')"
+            @clearError="errors.clearError('address')"
+          />
+          <BaseInput
+            v-model="form.amount"
+            label="Amount"
+            class="ml-2"
+            type="number"
+            :error="errors.getError('amount')"
+            @clearError="errors.clearError('amount')"
+          />
         </div>
         <BaseButton buttonColor="#E95420" @click="submitForm">
           SEND
@@ -26,7 +39,8 @@
 
 <script>
 import {defineComponent} from "vue";
-import {useErc20Token} from "@/stores/useErc20Token";
+import {useErc20TokenStore} from "@/stores/useErc20TokenStore";
+import useValidateModule from "@/composable/useValidateModule";
 
 export default defineComponent({
   name: "SendEtherForm",
@@ -38,34 +52,51 @@ export default defineComponent({
         receiver: "",
         amount: "",
       },
+      errors: this.validateModule.errorHandlerModule.value,
     }
   },
   setup() {
-    const erc20Token = useErc20Token();
+    const erc20Token = useErc20TokenStore();
+    const validateModule = useValidateModule();
 
     async function sendCurrency(payload) {
       return await erc20Token.sendCurrency(payload)
     }
     return {
-      erc20Token, sendCurrency
+      erc20Token, validateModule, sendCurrency
     }
   },
   methods: {
     async submitForm() {
-      const payload = {
-        receiver: this.form.receiver.trim(),
-        amount: this.form.amount,
+      try {
+        const payload = {
+          receiver: this.form.receiver.trim(),
+          amount: this.form.amount,
+        }
+        if (!this.validate(payload.receiver, payload.amount)) return
+        this.isLoading = true;
+        this.transaction = await this.sendCurrency(payload).then(res => {
+          alert(res.hash);
+          return res.hash;
+        });
+        this.form = {
+          receiver: "",
+          amount: "",
+        };
+      } catch (e) {
+        console.log("SubmitForm error: ", e);
+      } finally {
+        this.isLoading = false;
       }
-      this.isLoading = true;
-      this.transaction = await this.sendCurrency(payload).then(res => {
-        alert(res.hash);
-        return res.hash;
-      });
-      this.form = {
-        receiver: "",
-        amount: "",
-      };
-      this.isLoading = false;
+    },
+    validate(receiver, amount) {
+      return this.validateModule.validateForm([
+        { key: "address", value: receiver, method: "isNotEmpty" },
+        { key: "amount", value: amount, method: "isNotEmpty" },
+        { key: "address", value: receiver, method: "isAddressValid" },
+        { key: "amount", value: amount, method: "isAmountOverZero" },
+        { key: "amount", value: amount, method: "isAmountNoOverERC20Balance" },
+      ])
     }
   },
   computed: {

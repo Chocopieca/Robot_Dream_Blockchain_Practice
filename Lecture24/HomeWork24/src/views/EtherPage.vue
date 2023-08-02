@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import {useEtherJsStore} from "@/stores/useEtherJs";
+import {useEtherJsStore} from "@/stores/useEtherJsStore";
 import {computed, defineAsyncComponent} from "vue";
 
 export default {

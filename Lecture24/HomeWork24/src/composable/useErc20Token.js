@@ -1,6 +1,6 @@
 import {ethers} from "ethers";
 import abi from "@/abi";
-import {useEtherJsStore} from "@/stores/useEtherJs";
+import {useEtherJsStore} from "@/stores/useEtherJsStore";
 import {computed, onMounted, ref} from "vue";
 
 const provider = computed(() => useEtherJsStore().getProvider);
@@ -14,7 +14,7 @@ function fromDecimals(amount, decimal) {
   return useEtherJsStore().fromDecimals(amount, decimal);
 }
 
-export function useErc20Token() {
+export function useErc20TokenStore() {
   let instance = ref(null);
   let balance = ref(null);
   let decimals = ref("");

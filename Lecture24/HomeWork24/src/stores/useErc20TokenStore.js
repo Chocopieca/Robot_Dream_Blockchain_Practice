@@ -1,6 +1,6 @@
 import {defineStore} from "pinia";
 import {ethers} from "ethers";
-import {useEtherJsStore} from "@/stores/useEtherJs";
+import {useEtherJsStore} from "@/stores/useEtherJsStore";
 import abi from "@/abi";
 import {computed} from "vue";
 import {markRaw} from "@vue/reactivity";
@@ -15,7 +15,7 @@ function fromDecimals(amount, decimal) {
   return useEtherJsStore().fromDecimals(amount, decimal);
 }
 
-export const useErc20Token = defineStore("erc20Token", {
+export const useErc20TokenStore = defineStore("erc20Token", {
   state() {
     return {
       instance: null,
@@ -30,7 +30,7 @@ export const useErc20Token = defineStore("erc20Token", {
     getCurrentBalance: state => {
       if (state.balance && state.decimals) {
         return fromDecimals(state.balance, state.decimals);
-      }
+      } else return 0
     }
   },
   actions: {

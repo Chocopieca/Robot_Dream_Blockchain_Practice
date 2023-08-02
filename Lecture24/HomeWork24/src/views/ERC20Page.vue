@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import {useErc20Token} from "@/stores/useErc20Token";
+import {useErc20TokenStore} from "@/stores/useErc20TokenStore";
 import {computed, defineAsyncComponent} from "vue";
 
 export default {
@@ -34,7 +34,7 @@ export default {
     }
   },
   setup() {
-    const erc20Token = useErc20Token();
+    const erc20Token = useErc20TokenStore();
     const balance = computed(() => erc20Token.getCurrentBalance ?? "-.----");
     const symbol = computed(() => erc20Token.symbol ?? "");
     const name = computed(() => erc20Token.name ?? "");
