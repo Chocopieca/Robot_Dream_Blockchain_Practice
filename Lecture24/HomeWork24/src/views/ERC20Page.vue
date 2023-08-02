@@ -1,7 +1,16 @@
 <template>
   <div class="h-100 flex-center">
     <BaseCard width="500" bgColor="#ffffff">
-      <h1 class="ma-0">{{ name }}</h1>
+      <div class="d-flex justify-space-between align-center">
+        <h1 class="ma-0">{{ name }}</h1>
+        <a
+          href="https://sepolia.etherscan.io/address/0x02c7802C3Db3a36658fFBc97cce49c31Adbcff03"
+          target="_blank"
+          class="main-black-text"
+        >
+          Contract
+        </a>
+      </div>
       <div>Balance: {{ balance }} {{ symbol }}</div>
       <BaseDivider class="my-2" color="#000000"/>
       <div>Address:</div>
