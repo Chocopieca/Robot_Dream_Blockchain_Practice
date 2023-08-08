@@ -6,9 +6,12 @@
       <div>Balance: {{ userBtcBalance }} BTC</div>
       <BaseDivider class="my-2" color="#000000"/>
       <div>Address:</div>
-      <div class="address">
+      <a
+        :href="getAddressLink"
+        class="address main-black-text"
+      >
         {{ userAddress }}
-      </div>
+      </a>
       <BaseDivider class="my-2" color="#000000"/>
     </BaseCard>
   </div>
@@ -37,6 +40,9 @@ export default {
     getAddress() {
       return this.userAddress ? `${this.userAddress.slice(0, 10)}...${this.userAddress.slice(-10)}` : "---"
     },
+    getAddressLink() {
+      return `https://live.blockcypher.com/btc-testnet/address/${this.userAddress}/`
+    }
   }
 }
 </script>

@@ -16,6 +16,9 @@ export default defineConfig(({mode}) => {
   return {
     base: "/Robot_Dream_Blockchain_Practice/",
     plugins: [vue(), wasm()],
+    build: {
+      target: 'esnext' //browsers can handle the latest ES features
+    },
     rollupInputOptions: {
       plugins: [
         builtinsPlugin
