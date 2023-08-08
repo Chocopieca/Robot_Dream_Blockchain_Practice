@@ -1,6 +1,7 @@
 <template>
   <div class="h-100 flex-center">
-    <BaseCard width="500" bgColor="#ffffff">
+    <ConnectMetamask v-if="!isConnected" />
+    <BaseCard v-else width="500" bgColor="#ffffff">
       <h1 class="ma-0">ETH</h1>
       <div>Balance: {{ userEtherBalance }} ETH</div>
       <BaseDivider class="my-2" color="#000000"/>
@@ -21,14 +22,20 @@ import {computed, defineAsyncComponent} from "vue";
 export default {
   name: "EtherPage",
   components: {
-    SendEtherForm: defineAsyncComponent(() => import("@/components/module/etherPage/SendEtherForm.vue"))
+    SendEtherForm: defineAsyncComponent(
+        () => import("@/components/module/etherPage/SendEtherForm.vue")
+    ),
+    ConnectMetamask: defineAsyncComponent(
+        () => import("@/components/common/ConnectMetamask.vue")
+    ),
   },
   setup() {
     const useEtherJs = useEtherJsStore();
     const userAddress = computed(() => useEtherJs.userAddress);
     const userEtherBalance = computed(() => useEtherJs.userEtherBalance);
+    const isConnected = computed(() => useEtherJs.isConnected);
 
-    return {useEtherJs, userAddress, userEtherBalance};
+    return {useEtherJs, userAddress, userEtherBalance, isConnected};
   },
   computed: {
     getAddress() {

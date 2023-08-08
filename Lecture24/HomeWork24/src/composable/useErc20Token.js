@@ -64,6 +64,6 @@ export function useErc20TokenStore() {
   }
 
   return {
-    instance, getCurrentBalance, decimals, symbol, name, balance, getData, sendCurrency, setBalance
+    instance, getCurrentBalance, decimals, symbol, name, balance, getData, sendCurrency
   }
 }

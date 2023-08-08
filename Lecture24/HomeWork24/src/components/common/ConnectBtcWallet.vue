@@ -5,45 +5,40 @@
       v-else
       buttonColor="#E95420"
       class="connect-button"
-      @click="onConnectMetamask"
+      @click="onConnectBtcWallet"
     >
-      Connect Metamask
+      Connect your btc wallet
     </BaseButton>
   </Transition>
 </template>
 
 <script>
 import {defineComponent} from "vue";
-import {useEtherJsStore} from "@/stores/useEtherJsStore";
-import {useErc20TokenStore} from "@/stores/useErc20TokenStore";
+import {useBtcStore} from "@/stores/useBtcStore";
 
 export default defineComponent({
-  name: "ConnectMetamask",
+  name: "ConnectBtcWallet",
   data() {
     return {
       isLoading: false,
     }
   },
   setup() {
-    const erc20Token = useErc20TokenStore();
+    const useBtc = useBtcStore();
 
-    async function initErc20() {
-      await erc20Token.init();
+    async function initBtcWallet() {
+      return await useBtc.initBtcWallet();
     }
     return {
-      initErc20,
+      initBtcWallet
     }
   },
   methods: {
-    async onConnectMetamask() {
+    async onConnectBtcWallet() {
       this.isLoading = true;
-      await useEtherJsStore().onConnect();
-      await this.loadData();
+      await this.initBtcWallet();
       this.isLoading = false;
     },
-    async loadData() {
-      await this.initErc20();
-    }
   }
 })
 </script>

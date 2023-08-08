@@ -4,6 +4,7 @@
       <div>
         <router-link to="eth">ETH</router-link>
         <router-link to="erc20">ERC20</router-link>
+        <router-link to="btc">BTC</router-link>
       </div>
     </nav>
   </header>

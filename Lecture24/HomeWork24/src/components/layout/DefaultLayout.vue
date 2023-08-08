@@ -3,17 +3,13 @@
   <div class="wrapper font-family-poppins">
     <AppHeader />
     <main>
-      <Transition>
-        <ConnectMetamask v-if="!isConnected" />
-        <slot v-else />
-      </Transition>
+      <slot />
     </main>
   </div>
 </template>
 
 <script lang="ts">
 import { defineAsyncComponent, defineComponent } from "vue";
-import { useEtherJsStore } from "@/stores/useEtherJsStore";
 
 export default defineComponent({
   name: "DefaultLayout",
@@ -21,18 +17,10 @@ export default defineComponent({
     AppHeader: defineAsyncComponent(
       () => import("@/components/common/AppHeader.vue")
     ),
-    ConnectMetamask: defineAsyncComponent(
-      () => import("@/components/common/ConnectMetamask.vue")
-    ),
     ParticlesComponent: defineAsyncComponent(
       () => import("@/components/common/ParticlesComponent.vue")
     ),
   },
-  computed: {
-    isConnected() {
-      return useEtherJsStore().isConnected;
-    }
-  }
 });
 </script>
 

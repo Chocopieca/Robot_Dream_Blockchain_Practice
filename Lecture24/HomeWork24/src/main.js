@@ -1,5 +1,8 @@
 import './assets/main.css'
 
+import { Buffer } from 'buffer'
+globalThis.Buffer = Buffer
+
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'

@@ -1,6 +1,7 @@
 <template>
   <div class="h-100 flex-center">
-    <BaseCard width="500" bgColor="#ffffff">
+    <ConnectMetamask v-if="!isConnected" />
+    <BaseCard v-else width="500" bgColor="#ffffff">
       <div class="d-flex justify-space-between align-center">
         <h1 class="ma-0">{{ name }}</h1>
         <a
@@ -26,13 +27,17 @@
 <script>
 import {useErc20TokenStore} from "@/stores/useErc20TokenStore";
 import {computed, defineAsyncComponent} from "vue";
+import {useEtherJsStore} from "@/stores/useEtherJsStore";
 
 export default {
   name: "ERC20Page",
   components: {
     SendErc20Form: defineAsyncComponent(() =>
         import("@/components/module/erc20Page/SendErc20Form.vue")
-    )
+    ),
+    ConnectMetamask: defineAsyncComponent(
+        () => import("@/components/common/ConnectMetamask.vue")
+    ),
   },
   data() {
     return {
@@ -48,21 +53,17 @@ export default {
     const symbol = computed(() => erc20Token.symbol ?? "");
     const name = computed(() => erc20Token.name ?? "");
 
-    async function initErc20() {
-      await erc20Token.init();
-    }
-
     return {
-      erc20Token, balance, symbol, name, initErc20
+      erc20Token, balance, symbol, name
     }
-  },
-  async created() {
-    await this.initErc20();
   },
   computed: {
     getAddress() {
       let address = "0x5aCD656a61d4b2AAB249C3Fe3129E3867ab99283";
       return `${address.slice(0, 10)}...${address.slice(-10)}`
+    },
+    isConnected() {
+      return useEtherJsStore().isConnected;
     }
   }
 }

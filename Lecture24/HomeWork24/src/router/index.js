@@ -26,6 +26,14 @@ const router = createRouter({
         layout: "DefaultLayout",
       },
     },
+    {
+      path: '/btc',
+      name: 'BtcPage',
+      component: () => import("../views/BtcPage.vue"),
+      meta: {
+        layout: "DefaultLayout",
+      },
+    },
   ]
 })
 
