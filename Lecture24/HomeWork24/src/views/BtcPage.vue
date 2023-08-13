@@ -13,6 +13,7 @@
         {{ userAddress }}
       </a>
       <BaseDivider class="my-2" color="#000000"/>
+      <SendBtcForm />
     </BaseCard>
   </div>
 </template>
@@ -26,6 +27,9 @@ export default {
   components: {
     ConnectBtcWallet: defineAsyncComponent(
         () => import("@/components/common/ConnectBtcWallet.vue")
+    ),
+    SendBtcForm: defineAsyncComponent(
+        () => import("@/components/module/btcPage/SendBtcForm.vue")
     ),
   },
   setup() {

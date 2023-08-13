@@ -3,26 +3,25 @@ import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
-// fix problem with tiny-secp256k1
+// fix problem "ESM integration proposal for Wasm" is not supported currently.
 import wasm from "vite-plugin-wasm";
 
-// Connect crypto from node js
-import builtins from 'rollup-plugin-node-builtins';
-const builtinsPlugin = builtins({crypto: true});
-builtinsPlugin.name = 'builtins';
+// fix problem with crypto and stream
+import { nodePolyfills } from 'vite-plugin-node-polyfills'
 
 // https://vitejs.dev/config/
 export default defineConfig(({mode}) => {
   return {
     base: "/Robot_Dream_Blockchain_Practice/",
-    plugins: [vue(), wasm()],
+    plugins: [
+      vue(),
+      wasm(),
+      nodePolyfills({
+        protocolImports: true
+      })
+    ],
     build: {
       target: 'esnext' //browsers can handle the latest ES features
-    },
-    rollupInputOptions: {
-      plugins: [
-        builtinsPlugin
-      ]
     },
     resolve: {
       alias: {

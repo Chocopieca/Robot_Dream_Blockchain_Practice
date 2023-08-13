@@ -97,8 +97,8 @@ export default defineComponent({
       return this.validateModule.validateForm([
         { key: "address", value: receiver, method: "isNotEmpty" },
         { key: "amount", value: amount, method: "isNotEmpty" },
-        { key: "address", value: receiver, method: "isAddressValid" },
-        { key: "amount", value: amount, method: "isAmountOverZero" },
+        { key: "address", value: receiver, method: "isEthAddressValid" },
+        { key: "amount", value: amount, method: "isValueOverZero" },
         { key: "amount", value: amount, method: "isAmountNoOverEtherBalance" },
       ])
     }
