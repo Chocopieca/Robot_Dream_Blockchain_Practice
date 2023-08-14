@@ -10,11 +10,6 @@ import {defineAsyncComponent} from "vue";
 
 export default {
   name: "EtherPage",
-  components: {
-    BtcCard: defineAsyncComponent(
-        () => import("@/components/module/btcPage/BtcCard.vue")
-    ),
-  },
   computed: {
     list() {
       return [

@@ -2,8 +2,8 @@
   <div class="h-100 flex-center">
     <ConnectMetamask v-if="!isConnected" />
     <BaseCard v-else width="500" bgColor="#ffffff">
-      <h1 class="ma-0">ETH</h1>
-      <div>Balance: {{ userEtherBalance }} ETH</div>
+      <h1 class="ma-0 main-bright-red-text">ETH</h1>
+      <div>Balance: <span class="size20-weight700 main-red-text">{{ userEtherBalance }}</span> ETH</div>
       <BaseDivider class="my-2" color="#000000"/>
       <div>Address:</div>
       <div class="address">

@@ -3,7 +3,7 @@
     <ConnectMetamask v-if="!isConnected" />
     <BaseCard v-else width="500" bgColor="#ffffff">
       <div class="d-flex justify-space-between align-center">
-        <h1 class="ma-0">{{ name }}</h1>
+        <h1 class="ma-0 main-bright-red-text">{{ name }}</h1>
         <a
           href="https://sepolia.etherscan.io/address/0x02c7802C3Db3a36658fFBc97cce49c31Adbcff03"
           target="_blank"
@@ -12,7 +12,7 @@
           Contract
         </a>
       </div>
-      <div>Balance: {{ balance }} {{ symbol }}</div>
+      <div>Balance: <span class="size20-weight700 main-red-text">{{ balance }} {{ symbol }}</span></div>
       <BaseDivider class="my-2" color="#000000"/>
       <div>Address:</div>
       <div class="address">

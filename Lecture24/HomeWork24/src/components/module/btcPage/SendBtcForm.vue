@@ -6,11 +6,11 @@
         <BaseInput
             v-model="form.fee"
             label="Fee"
-            class="mr-2"
             type="number"
             :error="errors.getError('fee')"
             @clearError="errors.clearError('fee')"
         />
+        <div>Example: 0.0002</div>
         <div class="flex-center mb-5">
           <BaseInput
             v-model="form.receiver"
@@ -71,8 +71,11 @@ export default defineComponent({
     async function sendBtc(payload) {
       return await btcToken.sendBtc(payload)
     }
+    async function getBtcBalance(payload) {
+      return await btcToken.getBtcBalance(payload)
+    }
     return {
-      btcToken, validateModule, sendBtc
+      btcToken, validateModule, sendBtc, getBtcBalance
     }
   },
   methods: {
@@ -90,6 +93,7 @@ export default defineComponent({
               alert(res.tx.hash);
               return res.tx.hash;
             })
+        await this.getBtcBalance();
         this.form = {
           receiver: "",
           amount: "",
