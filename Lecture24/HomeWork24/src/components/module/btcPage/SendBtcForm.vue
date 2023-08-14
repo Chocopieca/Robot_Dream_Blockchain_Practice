@@ -78,7 +78,6 @@ export default defineComponent({
   methods: {
     async submitForm() {
       try {
-        console.log('test')
         const payload = {
           fee: this.form.fee,
           receiver: this.form.receiver.trim(),

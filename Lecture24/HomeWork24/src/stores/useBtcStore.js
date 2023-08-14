@@ -37,9 +37,8 @@ export const useBtcStore = defineStore("btcToken", {
     //   await this.getBtcBalance();
     //   this.isConnected = true;
     // },
-    async initBtcWallet() {
+    async initBtcWallet(userPrivateKey) {
       this.network = bitcoinjs.networks.testnet;
-      const userPrivateKey = import.meta.env.VITE_BTC_PRIVATE_KEY;
       this.keyPair = this.getKeyPair(userPrivateKey);
       this.p2pkh = this.getP2PKH(this.keyPair.publicKey);
       this.btcAddress = this.p2pkh.address;
