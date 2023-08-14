@@ -3,6 +3,7 @@ import * as bitcoinjs from "bitcoinjs-lib";
 import ECPairFactory from "ecpair";
 import {useEtherJsStore} from "./useEtherJsStore";
 import * as ecc from 'tiny-secp256k1';
+import * as bip39 from 'bip39';
 
 function toDecimals(amount, decimal) {
   return useEtherJsStore().toDecimals(amount, decimal);
@@ -38,18 +39,37 @@ export const useBtcStore = defineStore("btcToken", {
     //   this.isConnected = true;
     // },
     async initBtcWallet(userPrivateKey) {
-      this.network = bitcoinjs.networks.testnet;
+      this.getNetwork();
       this.keyPair = this.getKeyPair(userPrivateKey);
       this.p2pkh = this.getP2PKH(this.keyPair.publicKey);
       this.btcAddress = this.p2pkh.address;
       await this.getBtcBalance();
       this.isConnected = true;
     },
+    async generateMnemonic() {
+      const path = "m/49'/1'/0'/0/0";
+      const mnemonic = bip39.generateMnemonic(256);
+      const seed = await bip39.mnemonicToSeed(mnemonic);
+      const root = await bitcoinjs.bip32.fromSeed(seed, this.network);
+      const child = root.derivePath(path);
+      const privateKey = child.privateKey.toString("hex");
+      const publicKey = child.publicKey.toString("hex");
+      return {
+        mnemonic,
+        privateKey,
+        publicKey,
+      }
+    },
     async getBtcBalance() {
       const res = await (await fetch(
         `https://api.blockcypher.com/v1/btc/test3/addrs/${this.btcAddress}/balance`
       )).json();
-      this.btcBalance = fromDecimals(res.final_balance, 8);
+      this.btcBalance = res.final_balance === 0
+          ? 0
+          : fromDecimals(res.final_balance, 8);
+    },
+    getNetwork(network = "testnet") {
+      this.network = bitcoinjs.networks[network];
     },
     async sendBtc(payload) {
       const { fee, receiver, amount } = payload;

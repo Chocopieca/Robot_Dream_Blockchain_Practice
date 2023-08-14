@@ -16,8 +16,8 @@
       :required="required"
       @keydown.enter="$emit('enter', $event)"
       @input="$emit('clearError')"
-      @focus="labelIsVisible = true"
-      @blur="labelIsVisible = false"
+      @focus="updateTitleStatus(true)"
+      @blur="updateTitleStatus(false)"
     >
     <div v-if="error" class="main-red-text size10-weight400">{{ error }}</div>
   </div>
@@ -56,12 +56,26 @@ export default defineComponent({
     error: {
       type: String,
       default: null
+    },
+    animateTitle: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
     return {
       labelIsVisible: false,
     };
+  },
+  mounted() {
+    if(!this.animateTitle) this.labelIsVisible = true;
+  },
+  methods: {
+    updateTitleStatus(value) {
+      if (this.animateTitle) {
+        this.labelIsVisible = value
+      }
+    }
   },
   computed: {
     internalValue: {

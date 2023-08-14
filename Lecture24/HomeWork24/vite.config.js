@@ -29,6 +29,9 @@ export default defineConfig(({mode}) => {
         "~~": fileURLToPath(new URL("./src", import.meta.url)),
       },
     },
+    optimizeDeps: {
+      exclude: ['js-big-decimal']
+    },
     assetsInclude: ["**/*.png", "**/*.svg"],
   }
 })

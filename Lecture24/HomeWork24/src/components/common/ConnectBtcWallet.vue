@@ -3,6 +3,9 @@
     <div class="card">
       <BaseLoading v-if="isLoading" />
       <form>
+        <h3>Connect your BTC address</h3>
+        <div class="mb-5">Enter your private key for wallet connection.</div>
+
         <BaseInput
           v-model="privateKey"
           label="Private key"

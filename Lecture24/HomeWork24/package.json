@@ -11,6 +11,7 @@
     "deploy": "npm run build && cd dist && cp index.html 404.html && cd ../ && git add dist -f && git commit -m 'Update_dist' && cd ../../ && git subtree push --prefix Lecture24/HomeWork24/dist origin gh-pages"
   },
   "dependencies": {
+    "bip39": "^3.1.0",
     "bitcoinjs-lib": "^5.2.0",
     "buffer": "^6.0.3",
     "dotenv": "^16.3.1",

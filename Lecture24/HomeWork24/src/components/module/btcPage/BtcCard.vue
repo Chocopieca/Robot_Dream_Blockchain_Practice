@@ -2,8 +2,13 @@
   <Transition mode="out-in">
     <ConnectBtcMenu v-if="!isConnected"/>
     <BaseCard v-else width="500" bgColor="#ffffff">
-      <h1 class="ma-0">Btc</h1>
-      <div>Balance: {{ userBtcBalance }} BTC</div>
+      <h1 class="ma-0 main-bright-red-text">Btc</h1>
+      <div>
+        Balance:
+        <span class="size20-weight700 main-red-text">
+          {{ userBtcBalance }} BTC
+        </span>
+      </div>
       <BaseDivider class="my-2" color="#000000"/>
       <div>Address:</div>
       <a

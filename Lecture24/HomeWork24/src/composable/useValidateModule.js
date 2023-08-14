@@ -125,7 +125,6 @@ export default function useValidateModule() {
         Buffer.from(privateKey, "hex"),
         { network }
       );
-      console.log("keyPair", keyPair);
       return true;
     } catch (error) {
       console.log('err', error);
