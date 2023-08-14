@@ -1,10 +1,12 @@
 import {ethers} from "ethers";
 import * as bitcoinjs from "bitcoinjs-lib";
+import ECPairFactory from "ecpair";
 import {ref} from "vue";
 import {useErc20TokenStore} from "@/stores/useErc20TokenStore";
 import ErrorHandler from "@/entities/ErrorHandler";
 import {useEtherJsStore} from "@/stores/useEtherJsStore";
 import {useBtcStore} from "@/stores/useBtcStore";
+import * as ecc from "tiny-secp256k1";
 
 export default function useValidateModule() {
   const erc20Token = useErc20TokenStore();
@@ -91,6 +93,45 @@ export default function useValidateModule() {
       return true;
     }
   }
+  function isPrivateKey(key, privateKey) {
+    if (!validateBitcoinPrivateKey(privateKey)) {
+      errorHandlerModule.value.setError(key,
+        "Incorrect private key."
+      );
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  function validateBitcoinPublicKey(publicKey) {
+    try {
+      const network = bitcoinjs.networks.testnet;
+      const ECPair = ECPairFactory(ecc);
+      const publicKeyBuffer = Buffer.from(publicKey, 'hex');
+      const keyPair = ECPair.fromPublicKey(publicKeyBuffer, { network });
+      const address = keyPair.getAddress();
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  function validateBitcoinPrivateKey(privateKey) {
+    try {
+      const network = bitcoinjs.networks.testnet;
+      const ECPair = ECPairFactory(ecc);
+      const keyPair = ECPair.fromPrivateKey(
+        Buffer.from(privateKey, "hex"),
+        { network }
+      );
+      console.log("keyPair", keyPair);
+      return true;
+    } catch (error) {
+      console.log('err', error);
+      return false;
+    }
+  }
 
   // arr example {key: "address", value: form.address, method: "isNotEmpty}
   function validateForm(arr) {
@@ -101,7 +142,7 @@ export default function useValidateModule() {
 
   return {
     isAmountNoOverERC20Balance, isAmountNoOverEtherBalance, isValueOverZero, isEthAddressValid, isNotEmpty,
-    isAmountNoOverBtcBalance, isBtcAddressValid,
+    isAmountNoOverBtcBalance, isBtcAddressValid, isPrivateKey,
     validateForm, errorHandlerModule
   }
 }
