@@ -10,11 +10,10 @@
           @click.prevent="changeTab({index, title: item.title})"
         >
           <span class="flex-center mr-2">{{ item.title }}</span>
-          <BaseIcon
+          <CloseIcon
             v-if="selectedTab === item.title && tabLengthProp.current !== 1"
-            iconName="close-thick.svg"
+            class="cursor-pointer"
             @click.stop="deleteTab"
-            :iconColor="{color: '#E95420', hover: '#ff4300'}"
           />
         </div>
         <div

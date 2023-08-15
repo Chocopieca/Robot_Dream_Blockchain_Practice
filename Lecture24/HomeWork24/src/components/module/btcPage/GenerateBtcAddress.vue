@@ -3,49 +3,39 @@
     <h3>Generate BTC address</h3>
     <div class="mb-5">Generate a BTC address for your wallet, then connect it.</div>
 
-    <div class="flex-center">
-      <BaseInput
-        v-model="mnemonic"
-        label="Mnemonic"
-        :animateTitle="false"
-        class="mr-5"
-        disabled
-      />
-      <BaseIcon
-        iconName="content-copy.svg"
-        @click="copyURL(mnemonic)"
-        :iconColor="{color: '#E95420', hover: '#ff4300'}"
-      />
-    </div>
-    <div class="flex-center">
-      <BaseInput
-        v-model="privateKey"
-        label="Private key"
-        :animateTitle="false"
-        class="mr-5"
-        disabled
-        :error="errors.getError('privateKey')"
-        @clearError="errors.clearError('privateKey')"
-      />
-      <BaseIcon
-        iconName="content-copy.svg"
-        @click="copyURL(privateKey)"
-        :iconColor="{color: '#E95420', hover: '#ff4300'}"
-      />
-    </div>
-    <div class="flex-center">
-      <BaseInput
-        v-model="publicKey"
-        label="Public key"
-        :animateTitle="false"
-        class="mb-5 mr-5"
-        disabled
-      />
-      <BaseIcon
-        iconName="content-copy.svg"
-        @click="copyURL(publicKey)"
-        :iconColor="{color: '#E95420', hover: '#ff4300'}"
-      />
+    <div class="mb-5">
+      <div class="flex-center">
+        <BaseInput
+          v-model="mnemonic"
+          label="Mnemonic"
+          :animateTitle="false"
+          class="mr-5"
+          disabled
+        />
+        <CopyIcon class="cursor-pointer" @click="copyURL(mnemonic)"/>
+      </div>
+      <div class="flex-center">
+        <BaseInput
+          v-model="privateKey"
+          label="Private key"
+          :animateTitle="false"
+          class="mr-5"
+          disabled
+          :error="errors.getError('privateKey')"
+          @clearError="errors.clearError('privateKey')"
+        />
+        <CopyIcon class="cursor-pointer" @click="copyURL(privateKey)"/>
+      </div>
+      <div class="flex-center">
+        <BaseInput
+          v-model="publicKey"
+          label="Public key"
+          :animateTitle="false"
+          class="mr-5"
+          disabled
+        />
+        <CopyIcon class="cursor-pointer" @click="copyURL(publicKey)"/>
+      </div>
     </div>
     <BaseButton
       buttonColor="#E95420"
