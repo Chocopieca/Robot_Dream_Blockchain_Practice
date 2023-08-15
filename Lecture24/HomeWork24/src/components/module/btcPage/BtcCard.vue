@@ -3,17 +3,19 @@
     <ConnectBtcMenu v-if="!isConnected"/>
     <BaseCard v-else width="500" bgColor="#ffffff">
       <h1 class="ma-0 main-bright-red-text">Btc</h1>
-      <div>
-        Balance:
-        <span class="size20-weight700 main-red-text">
+      <div class="d-flex justify-start align-center">
+        <div class="mr-2">Balance:</div>
+        <div class="size20-weight700 main-red-text mr-2">
           {{ userBtcBalance }} BTC
-        </span>
+        </div>
+        <RefreshIcon @click="updateBalance" class="cursor-pointer"/>
       </div>
       <BaseDivider class="my-2" color="#000000"/>
       <div>Address:</div>
       <a
         :href="getAddressLink"
         class="address main-black-text"
+        target="_blank"
       >
         {{ userAddress }}
       </a>
@@ -43,7 +45,16 @@ export default {
     const userAddress = computed(() => useBtc.getCurrentWallet.btcAddress);
     const userBtcBalance = computed(() => useBtc.getCurrentWallet.btcBalance);
 
-    return {userAddress, userBtcBalance, isConnected};
+    async function getBtcBalance() {
+      await useBtc.getBtcBalance()
+    }
+
+    return {userAddress, userBtcBalance, isConnected, getBtcBalance};
+  },
+  methods: {
+    async updateBalance() {
+      await this.getBtcBalance();
+    }
   },
   computed: {
     getAddress() {
