@@ -103,13 +103,13 @@ export const useBtcStore = defineStore("btcToken", {
     async getLastTx() {
       return (await (await fetch(
           "https://api.blockcypher.com/v1/btc/test3/addrs/" + this.getCurrentWallet.btcAddress,
-      )).json()).txrefs[1];
+      )).json()).txrefs[0];
     },
     getTxHex(lastTx, amountLeftValue, sendAmountValue, receiver) {
       const txb = new bitcoinjs.TransactionBuilder(this.getCurrentWallet.network);
       txb.addInput(lastTx.tx_hash, lastTx.tx_output_n);
-      txb.addOutput(this.getCurrentWallet.btcAddress, amountLeftValue);
       txb.addOutput(receiver, sendAmountValue);
+      txb.addOutput(this.getCurrentWallet.btcAddress, amountLeftValue);
       txb.sign(0, this.getCurrentWallet.keyPair);
       return txb.build().toHex();
     },
