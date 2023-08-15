@@ -101,9 +101,12 @@ export const useBtcStore = defineStore("btcToken", {
       return bitcoinjs.payments.p2pkh({ pubkey: publicKey, network: this.getCurrentWallet.network } )
     },
     async getLastTx() {
-      return (await (await fetch(
-          "https://api.blockcypher.com/v1/btc/test3/addrs/" + this.getCurrentWallet.btcAddress,
-      )).json()).txrefs[0];
+      const addressInfo = (await (await fetch(
+        "https://api.blockcypher.com/v1/btc/test3/addrs/" + this.getCurrentWallet.btcAddress,
+      )).json());
+      const getLastTx = addressInfo.txrefs.length > 1 ? 1 : 0;
+      console.log("getLastTx", getLastTx);
+      return addressInfo.txrefs[getLastTx];
     },
     getTxHex(lastTx, amountLeftValue, sendAmountValue, receiver) {
       const txb = new bitcoinjs.TransactionBuilder(this.getCurrentWallet.network);
