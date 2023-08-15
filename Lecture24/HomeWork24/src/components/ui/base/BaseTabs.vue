@@ -3,13 +3,26 @@
     <template v-slot>
       <div class="tabs-wrapper">
         <div
-          v-for="item of tabs"
+          v-for="(item, index) of tabs"
           :key="`tab-button-${item.id}`"
           class="tab"
           :class="selectedTab === item.title ? 'active-tab' : ''"
-          @click.prevent="changeTab(item.title)"
+          @click.prevent="changeTab({index, title: item.title})"
         >
-          <span>{{ item.title }}</span>
+          <span class="flex-center mr-2">{{ item.title }}</span>
+          <BaseIcon
+            v-if="selectedTab === item.title && tabLengthProp.current !== 1"
+            iconName="close-thick.svg"
+            @click.stop="deleteTab"
+            :iconColor="{color: '#E95420', hover: '#ff4300'}"
+          />
+        </div>
+        <div
+          v-if="withAddTab && tabMaxLang"
+          class="tab add-tab"
+          @click.prevent="createTab"
+        >
+          <span class="size16-weight700">+</span>
         </div>
       </div>
       <Transition>
@@ -33,6 +46,14 @@ export default defineComponent({
       type: Array,
       default: () => [],
     },
+    withAddTab: {
+      type: Boolean,
+      default: false,
+    },
+    tabLengthProp: {
+      type: Object,
+      default: () => {},
+    },
   },
   data() {
     return {
@@ -40,15 +61,31 @@ export default defineComponent({
     };
   },
   methods: {
-    changeTab(title) {
+    changeTab(payload) {
+      const { index, title } = payload;
+      this.isNativeTabChange(index);
       this.selectedTab = title;
     },
+    createTab() {
+      this.$emit("onCreateTab");
+    },
+    deleteTab() {
+      this.$emit("onDeleteTab");
+    },
+    isNativeTabChange(index) {
+      if (typeof index === "number") this.$emit("onChangeTab", index);
+    }
   },
   computed: {
     selectedTabContent() {
       return this.tabs.find((item) => {
-        return item.title == this.selectedTab;
+        return item.title === this.selectedTab;
       });
+    },
+    tabMaxLang() {
+      return this.withAddTab
+          ? this.tabLengthProp.current <= this.tabLengthProp.max
+          : null;
     },
   },
 });
@@ -64,6 +101,7 @@ export default defineComponent({
   display: flex;
   flex-wrap: wrap;
   text-align: center;
+  background-color: #f5deb3;
 
   &:before {
     content: "";
@@ -83,12 +121,26 @@ export default defineComponent({
     padding: 5px 10px;
     box-shadow: 0 0 15px hsl(0deg 0% 58% / 44%);
     cursor: pointer;
-    font-size: 12px;
+    font-size: 10px;
     font-weight: 700;
+    width: 75px;
+    height: 20px;
+    overflow: hidden;
+
+    &.add-tab {
+      background-color: #E95420;
+    }
 
     &.active-tab {
       background-color: #fff;
       z-index: 10;
+      display: flex;
+      width: 100px;
+      font-size: 12px;
+
+      span {
+        text-align: center;
+      }
     }
   }
 }

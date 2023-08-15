@@ -39,9 +39,9 @@ export default {
   },
   setup() {
     const useBtc = useBtcStore();
-    const isConnected = computed(() => useBtc.isConnected);
-    const userAddress = computed(() => useBtc.btcAddress);
-    const userBtcBalance = computed(() => useBtc.btcBalance);
+    const isConnected = computed(() => useBtc.getCurrentWallet.isConnected);
+    const userAddress = computed(() => useBtc.getCurrentWallet.btcAddress);
+    const userBtcBalance = computed(() => useBtc.getCurrentWallet.btcBalance);
 
     return {userAddress, userBtcBalance, isConnected};
   },

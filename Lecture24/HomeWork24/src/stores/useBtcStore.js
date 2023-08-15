@@ -15,15 +15,24 @@ function fromDecimals(amount, decimal) {
 export const useBtcStore = defineStore("btcToken", {
   state() {
     return {
-      isConnected: false,
-      keyPair: null,
-      p2pkh: null,
-      btcAddress: null,
-      btcBalance: 0,
-      network: null,
+      selectedIndex: 0,
+      walletId: 0,
+      wallets: [
+        {
+          isConnected: false,
+          keyPair: null,
+          p2pkh: null,
+          btcAddress: null,
+          btcBalance: 0,
+          network: null,
+        }
+      ],
     }
   },
   getters: {
+    getCurrentWalletId: state => state.walletId,
+    getSelectedIndex: state => state.selectedIndex,
+    getCurrentWallet: state => state.wallets[state.selectedIndex],
   },
   actions: {
     // async initBtcWalletCDN() {
@@ -40,17 +49,17 @@ export const useBtcStore = defineStore("btcToken", {
     // },
     async initBtcWallet(userPrivateKey) {
       this.getNetwork();
-      this.keyPair = this.getKeyPair(userPrivateKey);
-      this.p2pkh = this.getP2PKH(this.keyPair.publicKey);
-      this.btcAddress = this.p2pkh.address;
+      this.wallets[this.selectedIndex].keyPair = this.getKeyPair(userPrivateKey);
+      this.wallets[this.selectedIndex].p2pkh = this.getP2PKH(this.getCurrentWallet.keyPair.publicKey);
+      this.wallets[this.selectedIndex].btcAddress = this.getCurrentWallet.p2pkh.address;
       await this.getBtcBalance();
-      this.isConnected = true;
+      this.wallets[this.selectedIndex].isConnected = true;
     },
     async generateMnemonic() {
       const path = "m/49'/1'/0'/0/0";
       const mnemonic = bip39.generateMnemonic(256);
       const seed = await bip39.mnemonicToSeed(mnemonic);
-      const root = await bitcoinjs.bip32.fromSeed(seed, this.network);
+      const root = await bitcoinjs.bip32.fromSeed(seed, this.getCurrentWallet.network);
       const child = root.derivePath(path);
       const privateKey = child.privateKey.toString("hex");
       const publicKey = child.publicKey.toString("hex");
@@ -62,20 +71,20 @@ export const useBtcStore = defineStore("btcToken", {
     },
     async getBtcBalance() {
       const res = await (await fetch(
-        `https://api.blockcypher.com/v1/btc/test3/addrs/${this.btcAddress}/balance`
+        `https://api.blockcypher.com/v1/btc/test3/addrs/${this.getCurrentWallet.btcAddress}/balance`
       )).json();
-      this.btcBalance = res.final_balance === 0
+      this.wallets[this.selectedIndex].btcBalance = res.final_balance === 0
           ? 0
           : fromDecimals(res.final_balance, 8);
     },
     getNetwork(network = "testnet") {
-      this.network = bitcoinjs.networks[network];
+      this.wallets[this.selectedIndex].network = bitcoinjs.networks[network];
     },
     async sendBtc(payload) {
       const { fee, receiver, amount } = payload;
       const sendAmountValue = +toDecimals(amount, 8);
       const feeAmountValue = +toDecimals(fee, 8);
-      const balance = +toDecimals(this.btcBalance, 8);
+      const balance = +toDecimals(this.getCurrentWallet.btcBalance, 8);
       const amountLeftValue = balance - sendAmountValue - feeAmountValue;
       const lastTx = await this.getLastTx();
       const txHash = this.getTxHex(lastTx, amountLeftValue, sendAmountValue, receiver);
@@ -85,23 +94,23 @@ export const useBtcStore = defineStore("btcToken", {
       const ECPair = ECPairFactory(ecc);
       return ECPair.fromPrivateKey(
           Buffer.from(privateKey, "hex"),
-          { network: this.network }
+          { network: this.getCurrentWallet.network }
       );
     },
     getP2PKH(publicKey) {
-      return bitcoinjs.payments.p2pkh({ pubkey: publicKey, network: this.network } )
+      return bitcoinjs.payments.p2pkh({ pubkey: publicKey, network: this.getCurrentWallet.network } )
     },
     async getLastTx() {
       return (await (await fetch(
-          "https://api.blockcypher.com/v1/btc/test3/addrs/" + this.btcAddress,
+          "https://api.blockcypher.com/v1/btc/test3/addrs/" + this.getCurrentWallet.btcAddress,
       )).json()).txrefs[1];
     },
     getTxHex(lastTx, amountLeftValue, sendAmountValue, receiver) {
-      const txb = new bitcoinjs.TransactionBuilder(this.network);
+      const txb = new bitcoinjs.TransactionBuilder(this.getCurrentWallet.network);
       txb.addInput(lastTx.tx_hash, lastTx.tx_output_n);
-      txb.addOutput(this.btcAddress, amountLeftValue);
+      txb.addOutput(this.getCurrentWallet.btcAddress, amountLeftValue);
       txb.addOutput(receiver, sendAmountValue);
-      txb.sign(0, this.keyPair);
+      txb.sign(0, this.getCurrentWallet.keyPair);
       return txb.build().toHex();
     },
     async txPush(txHash) {
@@ -117,6 +126,25 @@ export const useBtcStore = defineStore("btcToken", {
         )).json();
       } catch (e) {
         console.log("sendBtc error: ", e);
+      }
+    },
+    updateSelectedIndex(index) {
+      this.selectedIndex = index;
+    },
+    createWallet() {
+      ++this.walletId;
+      this.wallets.push({
+        isConnected: false,
+        keyPair: null,
+        p2pkh: null,
+        btcAddress: null,
+        btcBalance: 0,
+        network: null,
+      })
+    },
+    deleteWallet() {
+      if (this.wallets.length > 1) {
+        this.wallets.splice(this.selectedIndex, 1);
       }
     }
   }
