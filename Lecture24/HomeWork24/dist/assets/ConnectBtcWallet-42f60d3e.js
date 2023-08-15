@@ -1,4 +1,0 @@
-
-
-
-import{_ as l,s as r,r as a,o as e,b as n,w as s,E as _,T as u}from"./index-16cfe48a.js";import{u as d}from"./useBtcStore-3235f34f.js";import"./useEtherJsStore-cbfd4020.js";const p=r({name:"ConnectBtcWallet",data(){return{isLoading:!1}},setup(){const t=d();async function o(){return await t.initBtcWallet()}return{initBtcWallet:o}},methods:{async onConnectBtcWallet(){this.isLoading=!0,await this.initBtcWallet(),this.isLoading=!1}}});function B(t,o,f,m,C,W){const c=a("BaseLoading"),i=a("BaseButton");return e(),n(u,{mode:"out-in"},{default:s(()=>[t.isLoading?(e(),n(c,{key:0})):(e(),n(i,{key:1,buttonColor:"#E95420",class:"connect-button",onClick:t.onConnectBtcWallet},{default:s(()=>[_(" Connect your btc wallet ")]),_:1},8,["onClick"]))]),_:1})}const h=l(p,[["render",B],["__scopeId","data-v-79e52b91"]]);export{h as default};

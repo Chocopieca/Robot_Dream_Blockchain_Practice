@@ -1,4 +1,0 @@
-
-
-
-import{s as c,x as r,_ as a,o as i,a as l,e as _,v as u}from"./index-16cfe48a.js";const o=c({name:"BaseIcon",props:{iconName:{type:String,default:"close-circle.svg"},iconColor:{type:Object,default:{color:"black",hover:"#292929"}},height:{type:String,default:"20px"},width:{type:String,default:"20px"}},computed:{iconPath(){return`url(../src/assets/icon/${this.iconName})`},getIconColor(){return this.iconColor.color},getIconHover(){return this.iconColor.hover},getHeight(){return this.height},getWidth(){return this.width}}}),s=()=>{r(e=>({"4e89f294":e.getHeight,"5e346ab9":e.getWidth,"9a291c46":e.getIconColor,"999be894":e.getIconHover}))},n=o.setup;o.setup=n?(e,t)=>(s(),n(e,t)):s;const d=o;const p={class:"icon dynamic-color"};function h(e,t,g,m,f,v){return i(),l("div",p,[_("i",{style:u({"-webkit-mask-image":e.iconPath,"mask-image":e.iconPath,"background-color":e.iconColor[0]})},null,4)])}const C=a(d,[["render",h],["__scopeId","data-v-7516993c"]]);export{C as default};
