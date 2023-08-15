@@ -32,7 +32,7 @@
           SEND
         </BaseButton>
       </form>
-      <div v-if="getBlockcypherLink" class="etherscan-link">
+      <div v-if="getBlockcypherLink" class="scan-link">
         <a
           :href="getBlockcypherLink"
           target="_blank"
@@ -125,11 +125,11 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.etherscan-link {
+.scan-link {
   text-align: center;
   white-space: nowrap;
   text-overflow: ellipsis;
-  max-width: 450px;
+  max-width: 400px;
   overflow: hidden;
   cursor: pointer;
 }
