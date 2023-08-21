@@ -23,10 +23,10 @@
 import {defineAsyncComponent} from "vue";
 
 export default {
-  name: "ConnectBtcMenu",
+  name: "BtcConnectionMenu",
   components: {
     ConnectBtcWallet: defineAsyncComponent(
-        () => import("@/components/common/ConnectBtcWallet.vue")
+        () => import("@/components/module/btcPage/ConnectBtcWallet.vue")
     ),
     GenerateBtcAddress: defineAsyncComponent(
         () => import("@/components/module/btcPage/GenerateBtcAddress.vue")

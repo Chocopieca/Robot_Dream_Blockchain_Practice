@@ -25,7 +25,7 @@
       </form>
       <div
         v-if="getEtherscanLink"
-        class="etherscan-link main-black-text"
+        class="scan-link main-black-text"
       >
         <a
           :href="getEtherscanLink"
@@ -112,11 +112,11 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.etherscan-link {
+.scan-link {
   text-align: center;
   white-space: nowrap;
   text-overflow: ellipsis;
-  max-width: 450px;
+  max-width: 400px;
   overflow: hidden;
   cursor: pointer;
 }

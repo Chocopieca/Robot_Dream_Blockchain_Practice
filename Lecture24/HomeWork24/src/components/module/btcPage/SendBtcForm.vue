@@ -32,7 +32,7 @@
           SEND
         </BaseButton>
       </form>
-      <div v-if="getBlockcypherLink" class="etherscan-link">
+      <div v-if="getBlockcypherLink" class="scan-link">
         <a
           :href="getBlockcypherLink"
           target="_blank"
@@ -71,11 +71,11 @@ export default defineComponent({
     async function sendBtc(payload) {
       return await btcToken.sendBtc(payload)
     }
-    async function getBtcBalance(payload) {
-      return await btcToken.getBtcBalance(payload)
+    async function updateBtcBalance() {
+      return await btcToken.updateBtcBalance()
     }
     return {
-      btcToken, validateModule, sendBtc, getBtcBalance
+      btcToken, validateModule, sendBtc, updateBtcBalance
     }
   },
   methods: {
@@ -93,7 +93,7 @@ export default defineComponent({
               alert(res.tx.hash);
               return res.tx.hash;
             })
-        await this.getBtcBalance();
+        await this.updateBtcBalance();
         this.form = {
           receiver: "",
           amount: "",
@@ -125,11 +125,11 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.etherscan-link {
+.scan-link {
   text-align: center;
   white-space: nowrap;
   text-overflow: ellipsis;
-  max-width: 450px;
+  max-width: 400px;
   overflow: hidden;
   cursor: pointer;
 }

@@ -16,8 +16,8 @@ export default function useValidateModule() {
 
   const erc20balance = ref(erc20Token.getCurrentBalance);
   const ethBalance = ref(etherJs.userEtherBalance);
-  const btcBalance = ref(btcToken.btcBalance);
-  const network = ref(btcToken.network);
+  const btcBalance = ref(btcToken.getCurrentWallet.btcBalance);
+  const network = ref(btcToken.getCurrentWallet.network);
 
   function isValueZero(val) {
     return typeof val === "number" && +val === 0

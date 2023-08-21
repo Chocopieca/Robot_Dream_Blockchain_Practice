@@ -79,7 +79,9 @@ export default {
       });
     },
     onDeleteTab() {
-      const currentIndex = this.selectedIndex - 1;
+      const currentIndex = this.selectedIndex === 0
+          ? this.selectedIndex + 1
+          : this.selectedIndex - 1;
       const currentTitle = this.list[currentIndex].title;
       this.$refs.tabModule.changeTab({
         index: null,

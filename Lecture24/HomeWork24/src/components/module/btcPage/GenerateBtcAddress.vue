@@ -71,22 +71,22 @@ export default {
   setup() {
     const useBtc = useBtcStore();
     const validateModule = useValidateModule();
-    function getNetwork() {
-      useBtc.getNetwork();
+    function initNetwork() {
+      useBtc.initNetwork();
     }
-    async function generateMnemonic() {
-      return await useBtc.generateMnemonic();
+    async function createNewBtcWallet() {
+      return await useBtc.createNewBtcWallet();
     }
     async function initBtcWallet(privateKey) {
       return await useBtc.initBtcWallet(privateKey);
     }
 
     return {
-      useBtc, validateModule, getNetwork, generateMnemonic, initBtcWallet,
+      useBtc, validateModule, initNetwork, createNewBtcWallet, initBtcWallet,
     }
   },
   mounted() {
-    this.getNetwork();
+    this.initNetwork();
   },
   methods: {
     async copyURL(text) {
@@ -98,7 +98,7 @@ export default {
       }
     },
     async onGenerateAddress() {
-      const data = await this.generateMnemonic();
+      const data = await this.createNewBtcWallet();
       const { privateKey, publicKey, mnemonic } = data;
       this.privateKey = privateKey;
       this.publicKey = publicKey;
