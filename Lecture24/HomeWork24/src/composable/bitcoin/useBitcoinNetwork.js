@@ -1,6 +1,8 @@
 import {computed} from "vue";
+import {useBtcStore} from "@/stores/useBtcStore";
 
-export default function useBitcoinNetwork(wallets, selectedIndex) {
+export default function useBitcoinNetwork() {
+    const btcStore = useBtcStore();
     const networks = {
         mainnet: {
             name: "Mainnet",
@@ -17,15 +19,19 @@ export default function useBitcoinNetwork(wallets, selectedIndex) {
     };
 
     const getSelectedNetwork = computed(() => {
-        return networks[wallets[selectedIndex].selectedNetwork];
+        return networks[btcStore.getCurrentWallet.selectedNetwork]
+    })
+    const isTestnetNetwork = computed(() => {
+        return getSelectedNetwork.value
+            ? getSelectedNetwork.value.name === "Testnet"
+            : true;
     })
 
-    function setCurrentNetwork(networkIndex) {
-        const networks = ["mainnet", "testnet"];
-        return  networks[networkIndex];
+    function setCurrentNetwork(network) {
+        return btcStore.changeNetwork(network);
     }
 
     return {
-        getSelectedNetwork, setCurrentNetwork
+        getSelectedNetwork, isTestnetNetwork, setCurrentNetwork
     }
 }

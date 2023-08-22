@@ -1,8 +1,10 @@
 import {defineStore} from "pinia";
 import useBitcoinUtils from "@/composable/bitcoin/useBitcoinUtils";
-import useBitcoinNetwork from "@/composable/bitcoin/useBitcoinNetwork";
 import {computed} from "vue";
 
+
+const bitcoinUtils = computed(() =>
+    useBitcoinUtils());
 export const useBtcStore = defineStore("btcToken", {
   state() {
     return {
@@ -24,6 +26,7 @@ export const useBtcStore = defineStore("btcToken", {
   getters: {
     getCurrentWalletId: state => state.walletId,
     getSelectedIndex: state => state.selectedIndex,
+    getWallets: state => state.wallets,
     getCurrentWallet: state => state.wallets[state.selectedIndex],
   },
   actions: {
@@ -60,6 +63,9 @@ export const useBtcStore = defineStore("btcToken", {
       const txHash = bitcoinUtils.value.getTxHex(lastTx, amountLeftValue, sendAmountValue, receiver);
       return await bitcoinUtils.value.txPush(txHash);
     },
+    changeNetwork(network) {
+      this.wallets[this.selectedIndex].selectedNetwork = network
+    },
     async createNewBtcWallet() {
       return bitcoinUtils.value.generateMnemonic()
     },
@@ -85,10 +91,3 @@ export const useBtcStore = defineStore("btcToken", {
     }
   }
 })
-
-const btcStore = useBtcStore();
-
-const bitcoinNetwork = computed(() =>
-    useBitcoinNetwork(btcStore.wallets, btcStore.selectedIndex));
-const bitcoinUtils = computed(() =>
-    useBitcoinUtils(btcStore.getCurrentWallet, bitcoinNetwork.value.getSelectedNetwork.value));

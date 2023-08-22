@@ -1,9 +1,11 @@
-import {useEtherJsStore} from "@/stores/useEtherJsStore";
 import * as bitcoinjs from "bitcoinjs-lib";
 import ECPairFactory from "ecpair";
 import * as ecc from "tiny-secp256k1";
 import * as bip39 from "bip39";
 import {computed} from "vue";
+import {useBtcStore} from "@/stores/useBtcStore";
+import useBitcoinNetwork from "@/composable/bitcoin/useBitcoinNetwork";
+import {useEtherJsStore} from "@/stores/useEtherJsStore";
 
 function fromDecimals(amount, decimal) {
     return useEtherJsStore().fromDecimals(amount, decimal);
@@ -11,10 +13,15 @@ function fromDecimals(amount, decimal) {
 function toDecimals(amount, decimal) {
     return useEtherJsStore().toDecimals(amount, decimal);
 }
-export default function useBitcoinUtils(currentWallet, selectedNetwork) {
-    const getAddressLink = computed(() =>
-        `https://live.blockcypher.com/${selectedNetwork.BScanNetwork}/address/${this.userAddress}/`
-    )
+export default function useBitcoinUtils() {
+    const currentWallet = useBtcStore().getCurrentWallet;
+    const selectedNetwork = useBitcoinNetwork().getSelectedNetwork.value;
+
+    const getAddressLink = computed(() => {
+        if (selectedNetwork && currentWallet) {
+            return `https://live.blockcypher.com/${selectedNetwork.BScanNetwork}/address/${currentWallet.btcAddress}/`
+        } else return ''
+    })
 
     async function getBtcBalance() {
         const res = await (await fetch(
